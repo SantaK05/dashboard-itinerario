@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Itinerario Camper — Estate 2025</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -239,6 +240,31 @@
       flex-shrink: 0;
       margin-bottom: 1px;
     }
+
+    /* ── Map ── */
+    .map-wrap {
+      max-width: 960px;
+      margin: 0 auto 2.5rem;
+    }
+    #route-map {
+      width: 100%;
+      height: 480px;
+      border: 1px solid var(--line);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: var(--surface2);
+    }
+    .map-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .map-link:hover { text-decoration: underline; }
 
     /* ── Legend ── */
     .legend {
@@ -532,6 +558,18 @@
             </div>
         </section>
 
+        <!-- Map -->
+        <section class="section-wrap map-wrap">
+            <div class="section-head">
+                <span class="section-label">Percorso completo</span>
+                <div class="section-line"></div>
+            </div>
+            <div id="route-map"></div>
+            <a class="map-link" href="https://maps.app.goo.gl/UvwKQXw1A5DCDabV8" target="_blank" rel="noopener">
+                ↗ Apri percorso completo in Google Maps
+            </a>
+        </section>
+
         <!-- Legend -->
         <footer class="legend">
             <div class="legend-item">
@@ -548,5 +586,57 @@
             </div>
         </footer>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      const stops = [
+        { name: "BGY (partenza)",     latlng: [45.6657,  9.6958],  day: "Giorno 1" },
+        { name: "Montpellier",        latlng: [43.6109,  3.8761],  day: "Giorno 1–2" },
+        { name: "Peñíscola",          latlng: [40.3676,  0.3932],  day: "Giorno 2–3" },
+        { name: "Cabo de Gata",       latlng: [36.7817, -2.2422],  day: "Giorno 3–5" },
+        { name: "Ronda",              latlng: [36.7462, -5.1612],  day: "Giorno 5–7" },
+        { name: "Córdoba",            latlng: [37.8893, -4.7793],  day: "Giorno 7–9" },
+        { name: "Valencia / Albufera",latlng: [39.4738, -0.3756],  day: "Giorno 9–10" },
+        { name: "Andorra la Vella",   latlng: [42.5063,  1.5218],  day: "Giorno 10–12" },
+        { name: "BGY (rientro)",      latlng: [45.6659,  9.6953],  day: "Giorno 12" },
+      ];
+
+      const map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 18,
+      }).addTo(map);
+
+      // Route polyline
+      const line = L.polyline(stops.map(s => s.latlng), {
+        color: '#2C5F8A',
+        weight: 3,
+        opacity: 0.75,
+        dashArray: '6 4',
+      }).addTo(map);
+
+      // Markers
+      const dotIcon = (isFirst, isLast) => L.divIcon({
+        className: '',
+        html: `<div style="
+          width:12px;height:12px;border-radius:50%;
+          background:${isFirst || isLast ? '#C06B50' : '#2C5F8A'};
+          border:2px solid #fff;
+          box-shadow:0 1px 4px rgba(0,0,0,0.25);
+        "></div>`,
+        iconSize: [12, 12],
+        iconAnchor: [6, 6],
+      });
+
+      stops.forEach((s, i) => {
+        const isFirst = i === 0;
+        const isLast  = i === stops.length - 1;
+        L.marker(s.latlng, { icon: dotIcon(isFirst, isLast) })
+          .addTo(map)
+          .bindPopup(`<strong>${s.name}</strong><br><span style="font-size:11px;color:#6B6459">${s.day}</span>`);
+      });
+
+      map.fitBounds(line.getBounds(), { padding: [32, 32] });
+    </script>
     </body>
 </html>
