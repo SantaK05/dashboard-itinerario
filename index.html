@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Itinerario Camper — Estate 2025</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+            rel="stylesheet" />
+        <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #F5F2ED;
+      --surface:  #FFFEFB;
+      --surface2: #F0ECE4;
+      --ink:      #1A1714;
+      --ink2:     #6B6459;
+      --ink3:     #A89F94;
+      --line:     rgba(26,23,20,0.1);
+      --line2:    rgba(26,23,20,0.06);
+      --drive:    #C8A96B;
+      --drive-bg: #F7EED9;
+      --rest:     #6B9E7A;
+      --rest-bg:  #DFF0E4;
+      --back:     #C06B50;
+      --back-bg:  #F5DDD7;
+      --accent:   #2C5F8A;
+      --r:        10px;
+      --r-lg:     16px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* ── Header ── */
+    .header {
+      max-width: 960px;
+      margin: 0 auto 3rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-left,
+    .eyebrow {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 8px;
+    }
+    .title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+    .title span {
+      color: var(--accent);
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .stat {
+      text-align: right;
+    }
+    .stat-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .stat-lbl {
+      font-size: 11px;
+      color: var(--ink3);
+      margin-top: 3px;
+      letter-spacing: 0.03em;
+    }
+    .stat-sep {
+      width: 1px;
+      background: var(--line);
+      align-self: stretch;
+    }
+
+    /* ── Section label ── */
+    .section-wrap {
+      max-width: 960px;
+      margin: 0 auto 2.5rem;
+    }
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1rem;
+    }
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink3);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    /* ── Night summary strip ── */
+    .nights-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .night-pill {
+      font-size: 12.5px;
+      color: var(--ink2);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      padding: 5px 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .night-pill strong {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    /* ── Grid ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r-lg);
+      padding: 1.1rem 1.2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(26,23,20,0.07);
+    }
+    .card.rest {
+      border-color: rgba(107,158,122,0.35);
+      background: #FDFDF9;
+    }
+    .card.return {
+      border-color: rgba(192,107,80,0.3);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .day-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink3);
+    }
+    .badge {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 100px;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .badge-drive { background: var(--drive-bg); color: #8A6C30; }
+    .badge-rest  { background: var(--rest-bg);  color: #3D7050; }
+    .badge-back  { background: var(--back-bg);  color: #7A3820; }
+
+    .dest {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.25;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--line2);
+    }
+
+    .details {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .detail {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--ink2);
+      line-height: 1.4;
+    }
+    .detail::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--ink3);
+      flex-shrink: 0;
+      margin-bottom: 1px;
+    }
+
+    /* ── Legend ── */
+    .legend {
+      max-width: 960px;
+      margin: 2.5rem auto 0;
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--line);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--ink2);
+    }
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card {
+      animation: fadeUp 0.4s ease both;
+    }
+    .cards-grid .card:nth-child(1)  { animation-delay: 0.04s; }
+    .cards-grid .card:nth-child(2)  { animation-delay: 0.08s; }
+    .cards-grid .card:nth-child(3)  { animation-delay: 0.12s; }
+    .cards-grid .card:nth-child(4)  { animation-delay: 0.16s; }
+    .cards-grid .card:nth-child(5)  { animation-delay: 0.20s; }
+    .cards-grid .card:nth-child(6)  { animation-delay: 0.24s; }
+    .cards-grid .card:nth-child(7)  { animation-delay: 0.28s; }
+    .cards-grid .card:nth-child(8)  { animation-delay: 0.32s; }
+
+    @media (max-width: 600px) {
+      .stats-row { gap: 1rem; }
+      .stat { text-align: left; }
+      .stat-sep { display: none; }
+    }
+  </style>
+    </head>
+    <body>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <p class="eyebrow">Itinerario Camper — Estate 2025</p>
+                <h1 class="title">Bergamo → <span>Spagna</span> &amp;
+                    Andorra</h1>
+            </div>
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat-val">12</div>
+                    <div class="stat-lbl">giorni totali</div>
+                </div>
+                <div class="stat-sep"></div>
+                <div class="stat">
+                    <div class="stat-val">~5.200</div>
+                    <div class="stat-lbl">km stimati</div>
+                </div>
+                <div class="stat-sep"></div>
+                <div class="stat">
+                    <div class="stat-val">11</div>
+                    <div class="stat-lbl">notti fuori</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Night summary -->
+        <section class="section-wrap">
+            <div class="section-head">
+                <span class="section-label">Distribuzione notti</span>
+                <div class="section-line"></div>
+            </div>
+            <div class="nights-strip">
+                <div class="night-pill"><strong>1</strong> Montpellier</div>
+                <div class="night-pill"><strong>1</strong> Peñíscola /
+                    Castellón</div>
+                <div class="night-pill"><strong>2</strong> Cabo de Gata</div>
+                <div class="night-pill"><strong>2</strong> Ronda</div>
+                <div class="night-pill"><strong>2</strong> Córdoba</div>
+                <div class="night-pill"><strong>1</strong> Valencia /
+                    Albufera</div>
+                <div class="night-pill"><strong>2</strong> Andorra la
+                    Vella</div>
+            </div>
+        </section>
+
+        <!-- Drive days -->
+        <section class="section-wrap">
+            <div class="section-head">
+                <span class="section-label">Trasferimenti</span>
+                <div class="section-line"></div>
+            </div>
+            <div class="cards-grid">
+
+                <div class="card">
+                    <div class="card-top">
+                        <span class="day-num">Giorno 1</span>
+                        <span class="badge badge-drive">guida lunga</span>
+                    </div>
+                    <div class="dest">BGY → Montpellier</div>
+                    <div class="divider"></div>
+                    <div class="details">
+                        <div class="detail">~7h38 di guida</div>
+                        <div class="detail">Partenza ore 14:45–15:15</div>
+                        <div class="detail">Arrivo ~22:45–23:30</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-top">
+                        <span class="day-num">Giorno 2</span>
+                        <span class="badge badge-drive">visita + trasf.</span>
+                    </div>
+                    <div class="dest">Montpellier → Peñíscola</div>
+                    <div class="divider"></div>
+                    <div class="details">
+                        <div class="detail">~5h32 di guida</div>
+                        <div class="detail">Mattina: Museo Fabre (ore 11)</div>
+                        <div class="detail">Partenza ~14:00–14:30</div>
+                        <div class="detail">Arrivo ~20:00–21:00</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-top">
+                        <span class="day-num">Giorno 3</span>
+                        <span class="badge badge-drive">guida lunga</span>
+                    </div>
+                    <div class="dest">Peñíscola → Cabo de Gata</div>
+                    <div class="divider"></div>
+                    <div class="details">
+                        <div class="detail">~5h59 di guida</div>
+                        <div class="detail">Partenza ore 07:00–07:30</div>
+                        <div class="detail">Arrivo ~14:00–15:30</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-top">
+                        <span class="day-num">Giorno 5</span>
+                        <span class="badge badge-drive">guida media</span>
+                    </div>
+                    <div class="dest">Cabo de Gata → Ronda</div>
+                    <div class="divider"></div>
+                    <div class="details">
+                        <div class="detail">~4h24 di guida</div>
+                        <div class="detail">Partenza ~07:30</div>
+                        <div class="detail">Arrivo ~12:30–13:30</div>
+                        <div class="detail">Puente Nuevo + tapas</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-top">
+                        <span class="day-num">Giorno 7</span>
+                        <span class="badge badge-drive">guida breve</span>
+                    </div>
+                    <div class="dest">Ronda → Córdoba</div>
+                    <div class="divider"></div>
+                    <div class="details">
+                        <div class="detail">~2h24 di guida</div>
+                        <div class="detail">Partenza ~07:45–08:00</div>
+                        <div class="detail">Arrivo ~10:30–11:15</div>
+                        <div class="detail">Mezquita + centro storico</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-top">
+                        <span class="day-num">Giorno 9</span>
+                        <span class="badge badge-drive">guida media</span>
+                    </div>
+                    <div class="dest">Córdoba → Valencia / Albufera</div>
+                    <div class="divider"></div>
+                    <div class="details">
+                        <div class="detail">~5h04 di guida</div>
+                        <div class="detail">Partenza ~07:30–08:00</div>
+                        <div class="detail">Arrivo ~13:00–14:00</div>
+                        <div class="detail">Base El Saler / Albufera</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-top">
+                        <span class="day-num">Giorno 10</span>
+                        <span class="badge badge-drive">guida media</span>
+                    </div>
+                    <div class="dest">Valencia → Andorra la Vella</div>
+                    <div class="divider"></div>
+                    <div class="details">
+                        <div class="detail">~5h09 di guida</div>
+                        <div class="detail">Partenza ~07:30</div>
+                        <div class="detail">Arrivo ~13:00–14:00</div>
+                    </div>
+                </div>
+
+                <div class="card return">
+                    <div class="card-top">
+                        <span class="day-num">Giorno 12</span>
+                        <span class="badge badge-back">rientro notturno</span>
+                    </div>
+                    <div class="dest">Andorra → BGY</div>
+                    <div class="divider"></div>
+                    <div class="details">
+                        <div class="detail">~11h19 di guida</div>
+                        <div class="detail">Partenza ~23:00–23:30 (notte
+                            prec.)</div>
+                        <div class="detail">Arrivo entro le 12:00</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Rest days -->
+        <section class="section-wrap">
+            <div class="section-head">
+                <span class="section-label">Giornate libere</span>
+                <div class="section-line"></div>
+            </div>
+            <div class="cards-grid">
+
+                <div class="card rest">
+                    <div class="card-top">
+                        <span class="day-num">Giorno 4</span>
+                        <span class="badge badge-rest">zero guida</span>
+                    </div>
+                    <div class="dest">Cabo de Gata — giorno pieno</div>
+                    <div class="divider"></div>
+                    <div class="details">
+                        <div class="detail">Spiagge e calette</div>
+                        <div class="detail">Bagno, birra, tramonto</div>
+                        <div class="detail">Cena easy</div>
+                    </div>
+                </div>
+
+                <div class="card rest">
+                    <div class="card-top">
+                        <span class="day-num">Giorno 6</span>
+                        <span class="badge badge-rest">zero guida</span>
+                    </div>
+                    <div class="dest">Ronda — giorno pieno</div>
+                    <div class="divider"></div>
+                    <div class="details">
+                        <div class="detail">Centro + miradores</div>
+                        <div class="detail">Baños Árabes (opzionale)</div>
+                        <div class="detail">Aperitivo al tramonto</div>
+                    </div>
+                </div>
+
+                <div class="card rest">
+                    <div class="card-top">
+                        <span class="day-num">Giorno 8</span>
+                        <span class="badge badge-rest">zero guida</span>
+                    </div>
+                    <div class="dest">Córdoba — giorno pieno</div>
+                    <div class="divider"></div>
+                    <div class="details">
+                        <div class="detail">Palacio de Viana</div>
+                        <div class="detail">Ponte Romano + quartiere
+                            ebraico</div>
+                        <div class="detail">Medina Azahara (opzionale)</div>
+                    </div>
+                </div>
+
+                <div class="card rest">
+                    <div class="card-top">
+                        <span class="day-num">Giorno 11</span>
+                        <span class="badge badge-rest">zero guida</span>
+                    </div>
+                    <div class="dest">Andorra — terme &amp; relax</div>
+                    <div class="divider"></div>
+                    <div class="details">
+                        <div class="detail">Mattina libera / spese
+                            duty-free</div>
+                        <div class="detail">Pomeriggio: Caldea</div>
+                        <div class="detail">Cena presto, riposo
+                            pre-rientro</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Legend -->
+        <footer class="legend">
+            <div class="legend-item">
+                <div class="legend-dot" style="background: var(--drive);"></div>
+                Giorno di trasferimento
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background: var(--rest);"></div>
+                Giornata libera
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background: var(--back);"></div>
+                Rientro notturno
+            </div>
+        </footer>
+
+    </body>
+</html>
