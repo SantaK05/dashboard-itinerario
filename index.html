@@ -311,9 +311,80 @@
       .stat { text-align: left; }
       .stat-sep { display: none; }
     }
+
+    /* ── Dark mode ── */
+    [data-theme="dark"] {
+      --bg:       #191714;
+      --surface:  #211F1B;
+      --surface2: #2B2824;
+      --ink:      #EDE9E3;
+      --ink2:     #9E9489;
+      --ink3:     #5A5249;
+      --line:     rgba(237,233,227,0.10);
+      --line2:    rgba(237,233,227,0.06);
+      --drive-bg: #2C2415;
+      --rest-bg:  #14221A;
+      --back-bg:  #281710;
+      --accent:   #6AA8D8;
+    }
+    [data-theme="dark"] .card.rest { background: var(--surface); }
+
+    /* smooth transitions on theme switch */
+    body, .card, .header, .legend, .stat-val, .night-pill, #route-map {
+      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+    }
+
+    /* ── Theme toggle button ── */
+    .theme-toggle {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.25rem;
+      z-index: 1000;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.2s ease, transform 0.15s ease;
+    }
+    .theme-toggle:hover {
+      color: var(--ink);
+      transform: scale(1.08);
+    }
+    .theme-toggle svg { display: block; }
+    .theme-toggle .icon-sun  { display: none; }
+    .theme-toggle .icon-moon { display: block; }
+    [data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
+    [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
   </style>
     </head>
     <body>
+
+        <!-- Theme toggle -->
+        <button class="theme-toggle" id="theme-toggle" aria-label="Cambia tema">
+            <!-- moon: shown in light mode -->
+            <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <!-- sun: shown in dark mode -->
+            <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+        </button>
 
         <!-- Header -->
         <header class="header">
@@ -588,55 +659,75 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+      // ── Theme ──────────────────────────────────────────────
+      const root   = document.documentElement;
+      const toggle = document.getElementById('theme-toggle');
+      const saved  = localStorage.getItem('theme');
+
+      if (saved) root.dataset.theme = saved;
+
+      const TILES = {
+        light: {
+          url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          attr: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        },
+        dark: {
+          url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+          attr: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
+        },
+      };
+
+      // ── Map ────────────────────────────────────────────────
       const stops = [
-        { name: "BGY (partenza)",     latlng: [45.6657,  9.6958],  day: "Giorno 1" },
-        { name: "Montpellier",        latlng: [43.6109,  3.8761],  day: "Giorno 1–2" },
-        { name: "Peñíscola",          latlng: [40.3676,  0.3932],  day: "Giorno 2–3" },
-        { name: "Cabo de Gata",       latlng: [36.7817, -2.2422],  day: "Giorno 3–5" },
-        { name: "Ronda",              latlng: [36.7462, -5.1612],  day: "Giorno 5–7" },
-        { name: "Córdoba",            latlng: [37.8893, -4.7793],  day: "Giorno 7–9" },
-        { name: "Valencia / Albufera",latlng: [39.4738, -0.3756],  day: "Giorno 9–10" },
-        { name: "Andorra la Vella",   latlng: [42.5063,  1.5218],  day: "Giorno 10–12" },
-        { name: "BGY (rientro)",      latlng: [45.6659,  9.6953],  day: "Giorno 12" },
+        { name: "BGY (partenza)",      latlng: [45.6657,  9.6958], day: "Giorno 1" },
+        { name: "Montpellier",         latlng: [43.6109,  3.8761], day: "Giorno 1–2" },
+        { name: "Peñíscola",           latlng: [40.3676,  0.3932], day: "Giorno 2–3" },
+        { name: "Cabo de Gata",        latlng: [36.7817, -2.2422], day: "Giorno 3–5" },
+        { name: "Ronda",               latlng: [36.7462, -5.1612], day: "Giorno 5–7" },
+        { name: "Córdoba",             latlng: [37.8893, -4.7793], day: "Giorno 7–9" },
+        { name: "Valencia / Albufera", latlng: [39.4738, -0.3756], day: "Giorno 9–10" },
+        { name: "Andorra la Vella",    latlng: [42.5063,  1.5218], day: "Giorno 10–12" },
+        { name: "BGY (rientro)",       latlng: [45.6659,  9.6953], day: "Giorno 12" },
       ];
 
       const map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false });
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 18,
-      }).addTo(map);
+      function isDark() { return root.dataset.theme === 'dark'; }
 
-      // Route polyline
+      let tileLayer = L.tileLayer(
+        isDark() ? TILES.dark.url : TILES.light.url,
+        { attribution: isDark() ? TILES.dark.attr : TILES.light.attr, maxZoom: 19 }
+      ).addTo(map);
+
       const line = L.polyline(stops.map(s => s.latlng), {
-        color: '#2C5F8A',
-        weight: 3,
-        opacity: 0.75,
-        dashArray: '6 4',
+        color: '#2C5F8A', weight: 3, opacity: 0.75, dashArray: '6 4',
       }).addTo(map);
 
-      // Markers
-      const dotIcon = (isFirst, isLast) => L.divIcon({
+      const dotIcon = (accent) => L.divIcon({
         className: '',
-        html: `<div style="
-          width:12px;height:12px;border-radius:50%;
-          background:${isFirst || isLast ? '#C06B50' : '#2C5F8A'};
-          border:2px solid #fff;
-          box-shadow:0 1px 4px rgba(0,0,0,0.25);
-        "></div>`,
-        iconSize: [12, 12],
-        iconAnchor: [6, 6],
+        html: `<div style="width:12px;height:12px;border-radius:50%;background:${accent};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.3)"></div>`,
+        iconSize: [12, 12], iconAnchor: [6, 6],
       });
 
       stops.forEach((s, i) => {
-        const isFirst = i === 0;
-        const isLast  = i === stops.length - 1;
-        L.marker(s.latlng, { icon: dotIcon(isFirst, isLast) })
+        const accent = (i === 0 || i === stops.length - 1) ? '#C06B50' : '#2C5F8A';
+        L.marker(s.latlng, { icon: dotIcon(accent) })
           .addTo(map)
-          .bindPopup(`<strong>${s.name}</strong><br><span style="font-size:11px;color:#6B6459">${s.day}</span>`);
+          .bindPopup(`<strong>${s.name}</strong><br><span style="font-size:11px;opacity:.7">${s.day}</span>`);
       });
 
       map.fitBounds(line.getBounds(), { padding: [32, 32] });
+
+      // ── Toggle handler ─────────────────────────────────────
+      toggle.addEventListener('click', () => {
+        const next = isDark() ? 'light' : 'dark';
+        root.dataset.theme = next;
+        localStorage.setItem('theme', next);
+
+        const t = TILES[next];
+        tileLayer.remove();
+        tileLayer = L.tileLayer(t.url, { attribution: t.attr, maxZoom: 19 }).addTo(map);
+      });
     </script>
     </body>
 </html>
