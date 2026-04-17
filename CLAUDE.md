@@ -4,26 +4,32 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-A single-file static HTML dashboard for a camper road trip itinerary (Bergamo → Spain & Andorra, Summer 2025). No build system, no dependencies, no JavaScript.
+A static HTML dashboard for a camper road trip itinerary (Bergamo → Spain & Andorra, Summer 2026). No build system. Open `index.html` directly in a browser — no server required.
 
-## Development
+## File structure
 
-Open `index.html` directly in a browser — no server required.
+- `index.html` — semantic HTML only; no inline styles or scripts
+- `styles.css` — all layout, theming, dark mode, and animations
+- `app.js` — Leaflet map initialization + dark mode toggle (persisted via `localStorage`)
+
+## Dependencies (CDN)
+
+Leaflet 1.9.4 loaded from `unpkg.com`. Fonts (Syne + DM Sans) from Google Fonts.
 
 ## Architecture
 
-Everything lives in `index.html`: CSS custom properties (`:root` variables) define the color palette and radii, inline `<style>` handles all layout and theming, and the body contains pure semantic HTML sections.
-
-**Design tokens (CSS variables):**
-- `--drive` / `--drive-bg` — transfer/driving days (gold)
+**Design tokens** (`styles.css` `:root`):
+- `--drive` / `--drive-bg` — transfer days (gold)
 - `--rest` / `--rest-bg` — rest days (green)
 - `--back` / `--back-bg` — return leg (terracotta)
 - `--accent` — accent blue
 - `--bg`, `--surface`, `--surface2` — background layers
 - `--ink`, `--ink2`, `--ink3` — text hierarchy
 
-**Card variants** are set via CSS classes: `.card` (default drive), `.card.rest`, `.card.return`. Badge style follows the same pattern: `.badge-drive`, `.badge-rest`, `.badge-back`.
+**Card variants**: `.card` (drive), `.card.rest`, `.card.return`. Badges: `.badge-drive`, `.badge-rest`, `.badge-back`.
 
-**Fonts:** Syne (headings/labels, `font-family: 'Syne'`) and DM Sans (body). Both loaded from Google Fonts.
+**Dark mode**: toggled by setting `data-theme="dark"` on `<html>`. Token overrides live in the `[data-theme="dark"]` block in `styles.css`. The map tile layer is also swapped (OSM light ↔ CartoDB dark) in `app.js`.
 
-**Animation:** Cards fade up on load via `@keyframes fadeUp`; stagger delay is applied per `nth-child` selector (currently wired for 8 cards per grid).
+**Animation**: Cards fade up via `@keyframes fadeUp`; stagger delays are hardcoded per `nth-child` (up to 8 cards per grid).
+
+**Map** (`app.js`): `stops[]` array drives both the polyline and markers. Start/end markers use `--back` color; intermediate stops use `--accent`.
