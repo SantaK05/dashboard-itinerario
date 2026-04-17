@@ -190,6 +190,7 @@ body {
 .badge-drive { background: var(--drive-bg); color: #8A6C30; }
 .badge-rest  { background: var(--rest-bg);  color: #3D7050; }
 .badge-back  { background: var(--back-bg);  color: #7A3820; }
+.badge-toll  { background: rgba(44,95,138,0.10); color: var(--accent); }
 
 .dest {
   font-family: 'Syne', sans-serif;
@@ -226,6 +227,31 @@ body {
   background: var(--ink3);
   flex-shrink: 0;
   margin-bottom: 1px;
+}
+
+/* ── Toll total ── */
+.toll-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding: 14px 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+}
+.toll-total-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink3);
+}
+.toll-total-amount {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
 }
 
 /* ── Map ── */
