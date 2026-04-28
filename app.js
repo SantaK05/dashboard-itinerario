@@ -18,14 +18,15 @@ const TILES = {
 
 // ── Map ────────────────────────────────────────────────
 const stops = [
-  { name: "BGY (partenza)",      latlng: [45.6657,  9.6958], day: "Giorno 1" },
-  { name: "Peñíscola",           latlng: [40.3676,  0.3932], day: "Giorno 1–2" },
-  { name: "Cabo de Gata",        latlng: [36.7817, -2.2422], day: "Giorno 2–4" },
-  { name: "Ronda",               latlng: [36.7462, -5.1612], day: "Giorno 4–6" },
-  { name: "Córdoba",             latlng: [37.8893, -4.7793], day: "Giorno 6–8" },
-  { name: "Valencia / Albufera", latlng: [39.4738, -0.3756], day: "Giorno 8–9" },
-  { name: "Andorra la Vella",    latlng: [42.5063,  1.5218], day: "Giorno 9–10" },
-  { name: "BGY (rientro)",       latlng: [45.6659,  9.6953], day: "Giorno 10" },
+  { name: "BGY / Orio al Serio",          latlng: [45.6657,  9.6958], day: "Giorno 1 — partenza" },
+  { name: "Kals / Matrei in Osttirol",    latlng: [47.0014, 12.6336], day: "Giorno 1–3" },
+  { name: "Krasno / Baške Oštarije",      latlng: [44.8614, 14.9892], day: "Giorno 3–5" },
+  { name: "Kulen Vakuf / Bihać",          latlng: [44.5775, 16.0394], day: "Giorno 5–7" },
+  { name: "Jajce / Travnik",              latlng: [44.3417, 17.2722], day: "Giorno 7–8" },
+  { name: "Blidinje Nature Park",         latlng: [43.6833, 17.4667], day: "Giorno 8–10" },
+  { name: "Omiš / Brela",                latlng: [43.4428, 16.6877], day: "Giorno 10–11" },
+  { name: "Buzet / Hum (Istria)",         latlng: [45.4064, 13.9703], day: "Giorno 11–12" },
+  { name: "BGY / Orio al Serio",          latlng: [45.6659,  9.6953], day: "Giorno 12 — rientro" },
 ];
 
 const map = L.map('route-map', { zoomControl: true, scrollWheelZoom: false });

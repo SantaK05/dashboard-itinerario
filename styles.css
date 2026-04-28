@@ -16,6 +16,8 @@
   --back:     #C06B50;
   --back-bg:  #F5DDD7;
   --accent:   #2C5F8A;
+  --idea:     #9A6A0A;
+  --idea-bg:  #FEF5D3;
   --r:        10px;
   --r-lg:     16px;
 }
@@ -165,6 +167,10 @@ body {
 .card.return {
   border-color: rgba(192,107,80,0.3);
 }
+.card.idea {
+  border-color: rgba(154,106,10,0.35);
+  background: var(--idea-bg);
+}
 
 .card-top {
   display: flex;
@@ -191,6 +197,7 @@ body {
 .badge-rest  { background: var(--rest-bg);  color: #3D7050; }
 .badge-back  { background: var(--back-bg);  color: #7A3820; }
 .badge-toll  { background: rgba(44,95,138,0.10); color: var(--accent); }
+.badge-idea  { background: var(--idea-bg);  color: var(--idea); }
 
 .dest {
   font-family: 'Syne', sans-serif;
@@ -278,6 +285,11 @@ body {
   letter-spacing: 0.02em;
 }
 .map-link:hover { text-decoration: underline; }
+.map-link-placeholder {
+  color: var(--ink3);
+  cursor: default;
+}
+.map-link-placeholder:hover { text-decoration: none; }
 
 /* ── Legend ── */
 .legend {
@@ -338,9 +350,12 @@ body {
   --drive-bg: #2C2415;
   --rest-bg:  #14221A;
   --back-bg:  #281710;
+  --idea-bg:  #231B05;
+  --idea:     #C8960A;
   --accent:   #6AA8D8;
 }
 [data-theme="dark"] .card.rest { background: var(--surface); }
+[data-theme="dark"] .card.idea { background: var(--surface); }
 
 /* smooth transitions on theme switch */
 body, .card, .header, .legend, .stat-val, .night-pill, #route-map {
